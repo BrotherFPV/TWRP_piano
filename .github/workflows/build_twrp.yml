@@ -31,7 +31,7 @@ on:
       MAKEFILE_NAME:
         description: '编译 Makefile 前缀'
         required: true
-        default: 'twrp_piano'
+        default: 'omni_piano'
       BUILD_TARGET:
         description: '编译目标文件 (vendor_bootimage / bootimage / recoveryimage)'
         required: true
@@ -82,8 +82,11 @@ jobs:
     - name: 克隆设备树 (Device Tree)
       run: |
         cd workspace
-        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ${{ github.event.inputs.DEVICE_PATH }}
-
+        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} temp_tree
+        mkdir -p device/xiaomi
+        mv temp_tree/xiaomi/piano device/xiaomi/piano
+        rm -rf temp_tree
+  
     - name: 开始编译 TWRP
       run: |
         cd workspace
